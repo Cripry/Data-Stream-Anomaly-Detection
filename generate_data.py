@@ -45,7 +45,7 @@ def data_generator(df: pd.DataFrame, endpoint: str, frequency: float = 1.0) -> N
 
 
 if __name__ == "__main__":
-    df = pd.read_csv(r"..\data\Location1.csv")
+    df = pd.read_csv(r"data\Location1.csv")
     endpoint = os.getenv("ENDPOINT_DATA_COLLECTION")
 
     data_generator(df, endpoint)
