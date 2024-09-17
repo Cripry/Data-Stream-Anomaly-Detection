@@ -15,8 +15,10 @@ def preprocess_df(df):
     Returns:
         The preprocessed DataFrame.
     """
-    df["Time"] = pd.to_datetime(df["Time"], utc=True)
-    df.sort_values(by="Time", inplace=True)
+    df["date"] = pd.to_datetime(df["date"], utc=True)
+    df.drop(columns=["unix", "symbol", "Volume USD"], axis=1, inplace=True)
+    df.columns = [column.replace(" ", "") for column in df.columns]
+    df.sort_values(by="date", inplace=True)
     return df
 
 
@@ -84,7 +86,7 @@ def data_generator(df, db_handler, table_name, frequency=1.0, start_index=0):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv(r"data\Location1.csv")
-    table_name = "WindTurbinePowerData"
+    df = pd.read_csv(r"data\BTC-Hourly.csv")
+    table_name = "BTCData"
     db_handler = DatabaseHandler()
     data_generator(df, db_handler, table_name)

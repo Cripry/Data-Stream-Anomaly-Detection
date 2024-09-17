@@ -34,7 +34,7 @@ class DatabaseHandler:
         # Ensure column definitions include data types
         data_type_columns = []
         for col in columns:
-            col_parts = col.split()  
+            col_parts = col.split()
             if len(col_parts) != 2:
                 raise ValueError(
                     "Invalid column definition. Each column should be formatted as 'name data_type' (e.g., 'Date and Hour VARCHAR(255)')"
@@ -70,3 +70,41 @@ class DatabaseHandler:
         """Closes the connection to the database."""
         self.cursor.close()
         self.connection.close()
+
+    def fetch_new_data(self, table_name, last_checked_timestamp=None):
+        """Retrieves new data from the specified table since the last checked timestamp (optional).
+
+        Args:
+            table_name (str): The name of the table to fetch data from.
+            last_checked_timestamp (str, optional): A timestamp in the format 'YYYY-MM-DD HH:MM:SS+TZ'
+                                                    to filter data newer than this time.
+
+        Returns:
+            list: A list of dictionaries representing the fetched data rows.
+        """
+
+        query = f"SELECT * FROM {table_name}"
+        if last_checked_timestamp:
+            query += f" WHERE date > '{last_checked_timestamp}'"
+
+        self.cursor.execute(query)
+        columns = [desc[0] for desc in self.cursor.description]
+        data = [dict(zip(columns, row)) for row in self.cursor.fetchall()]
+        return data
+
+    def update_anomaly_status(self, table_name, date, is_anomaly):
+        """Updates the 'isanomaly' column for a specific row in the table.
+
+        Args:
+            table_name (str): The name of the table to update.
+            date (str): The 'date' value of the row to update.
+            is_anomaly (bool): The new anomaly status (True/False).
+        """
+
+        query = f"""
+            UPDATE {table_name} 
+            SET isanomaly = %s 
+            WHERE date = %s;
+        """
+        self.cursor.execute(query, (is_anomaly, date))
+        self.connection.commit()
