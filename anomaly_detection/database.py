@@ -83,7 +83,10 @@ class DatabaseHandler:
 
         query = f""" SELECT * FROM ( SELECT * FROM {table_name} ORDER BY date DESC LIMIT {limit} ) AS subquery ORDER BY date ASC;"""
 
-        self.cursor.execute(query)
-        columns = [desc[0] for desc in self.cursor.description]
-        data = [dict(zip(columns, row)) for row in self.cursor.fetchall()]
-        return data
+        try:
+            self.cursor.execute(query)
+            columns = [desc[0] for desc in self.cursor.description]
+            data = [dict(zip(columns, row)) for row in self.cursor.fetchall()]
+            return data
+        except psycopg2.errors.UndefinedTable:
+            return None

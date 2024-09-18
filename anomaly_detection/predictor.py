@@ -64,7 +64,6 @@ class AnomalyPredictorService:
         Determines if it's an anomaly.
         """
         mae = abs(real_value - predicted_value)
-        print(predicted_value, real_value, mae)
         return mae > Config.THRESHOLD
 
     def predict(self):

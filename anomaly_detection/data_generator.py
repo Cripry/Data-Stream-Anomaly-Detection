@@ -51,7 +51,7 @@ class DataGeneratorService:
                 # Prepopulate the table
                 for _, row in self.df.iloc[: Config.SEQUENCE_LENGTH].iterrows():
                     data = row.to_dict()
-                    data["isAnomaly"] = None
+                    data["isAnomaly"] = False
                     if "date" in data and isinstance(data["date"], pd.Timestamp):
                         data["date"] = data["date"].isoformat()
                     self.db_handler.insert_data(Config.TABLE_NAME, data)
