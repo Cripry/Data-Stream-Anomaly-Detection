@@ -1,20 +1,19 @@
 import psycopg2
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
 
 class DatabaseHandler:
-    def __init__(self):
+    def __init__(self, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT):
         load_dotenv()
 
         self.connection = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT"),
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT,
         )
         self.cursor = self.connection.cursor()
 
@@ -71,40 +70,20 @@ class DatabaseHandler:
         self.cursor.close()
         self.connection.close()
 
-    def fetch_new_data(self, table_name, last_checked_timestamp=None):
-        """Retrieves new data from the specified table since the last checked timestamp (optional).
+    def fetch_new_data(self, table_name, limit):
+        """Retrieves the last 'limit' rows from the specified table in ascending order based on the date column.
 
         Args:
             table_name (str): The name of the table to fetch data from.
-            last_checked_timestamp (str, optional): A timestamp in the format 'YYYY-MM-DD HH:MM:SS+TZ'
-                                                    to filter data newer than this time.
+            limit (int): The number of rows to retrieve.
 
         Returns:
-            list: A list of dictionaries representing the fetched data rows.
+            list: A list of dictionaries representing the fetched data rows in ascending order.
         """
 
-        query = f"SELECT * FROM {table_name}"
-        if last_checked_timestamp:
-            query += f" WHERE date > '{last_checked_timestamp}'"
+        query = f""" SELECT * FROM ( SELECT * FROM {table_name} ORDER BY date DESC LIMIT {limit} ) AS subquery ORDER BY date ASC;"""
 
         self.cursor.execute(query)
         columns = [desc[0] for desc in self.cursor.description]
         data = [dict(zip(columns, row)) for row in self.cursor.fetchall()]
         return data
-
-    def update_anomaly_status(self, table_name, date, is_anomaly):
-        """Updates the 'isanomaly' column for a specific row in the table.
-
-        Args:
-            table_name (str): The name of the table to update.
-            date (str): The 'date' value of the row to update.
-            is_anomaly (bool): The new anomaly status (True/False).
-        """
-
-        query = f"""
-            UPDATE {table_name} 
-            SET isanomaly = %s 
-            WHERE date = %s;
-        """
-        self.cursor.execute(query, (is_anomaly, date))
-        self.connection.commit()
