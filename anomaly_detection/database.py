@@ -90,3 +90,5 @@ class DatabaseHandler:
             return data
         except psycopg2.errors.UndefinedTable:
             return None
+        except psycopg2.errors.InFailedSqlTransaction:
+            return None

@@ -23,21 +23,19 @@ UPDATE_INTERVAL = 2  # seconds
 TABLE_NAME = Config.TABLE_NAME
 WINDOW_LIMIT = 3000
 
-if "execute_flag" not in st.session_state:
-    st.session_state.execute_flag = False
+execute_flag = False
 
 
 def execute_scripts():
     """Execute the data generation and prediction scripts."""
-    if not st.session_state.execute_flag:
-        st.session_state.execute_flag = True
+    global execute_flag
+    if not execute_flag:
         subprocess.Popen(
             [
                 sys.executable,
                 os.path.join(BASE_DIR, "anomaly_detection", "predictor.py"),
             ]
         )
-        time.sleep(3)
         subprocess.Popen(
             [
                 sys.executable,
@@ -45,7 +43,7 @@ def execute_scripts():
             ]
         )
 
-        time.sleep(7)
+        time.sleep(10)
 
 
 def get_data() -> pd.DataFrame:
@@ -73,6 +71,7 @@ if __name__ == "__main__":
         st.header("Configuration")
         if st.button("Start Execution"):
             execute_scripts()  # Start the execution scripts
+            execute_flag = True
 
     # Placeholder for the chart (initially empty)
     chart_placeholder = st.empty()
@@ -80,7 +79,7 @@ if __name__ == "__main__":
     # Create the figure and axes once, outside the loop
     fig, ax = plt.subplots(figsize=(16, 8))
 
-    while st.session_state.execute_flag:
+    while True:
         data = get_data()
         if data is not None:
             # Clear the previous plot

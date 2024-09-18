@@ -1,15 +1,12 @@
-
 # Bitcoin Anomaly Detective 🕵️‍♂️
 
 **Uncover Unusual Activity in Bitcoin Transactions**
 
 This project focuses on identifying anomalies in Bitcoin transactions using a forecasting-based approach. A powerful LSTM model learns transactional patterns to predict the next highest price for transactions within the next hour. Any significant deviation (measured by Mean Absolute Error - MAE) from the predicted price is flagged as a potential anomaly.
 
-
 The `data_generator.py` module serves as the engine driving the real-time simulation. It dynamically generates a database table if one doesn't already exist, and populates it with historical Bitcoin transaction data from 2021.
 
 The core objective is to forecast the peak Bitcoin value within each hour and subsequently identify any market anomalies. To mimic a continuous data stream, the generator transmits data to the `/predict_anomaly` endpoint (established by the `Predictor` module) at a frequency specified in the `config.py` file.
-
 
 ## Features 🚀
 
@@ -62,7 +59,12 @@ The core objective is to forecast the peak Bitcoin value within each hour and su
      ```
 5. **Run the Streamlit app:**
 
-   `streamlit run app.py`
+   `streamlit run app.py `
+   ![1726698752595](image/README/1726698752595.png)
+
+   After 3-5 minutes, you will be able to see the anomalies.
+
+   ![1726698865880](image/README/1726698865880.png)
 
 ## Project Structure 📂
 
@@ -77,7 +79,7 @@ The project utilizes real-time Bitcoin transaction data from 2021, available on 
 
 ## License 📄
 
-This project is licensed under the [Apache License 2.0] - 
+This project is licensed under the [Apache License 2.0] -
 
 ## Contact 📧
 
