@@ -1,6 +1,4 @@
-# Bitcoin Anomaly Detective 🕵️‍♂️
-
-**Uncover Unusual Activity in Bitcoin Transactions**
+# Detecting anomalies in Bitcoin's "high" price 🕵️‍♂️
 
 This project focuses on identifying anomalies in Bitcoin transactions using a forecasting-based approach. A powerful LSTM model learns transactional patterns to predict the next highest price for transactions within the next hour. Any significant deviation (measured by Mean Absolute Error - MAE) from the predicted price is flagged as a potential anomaly.
 
