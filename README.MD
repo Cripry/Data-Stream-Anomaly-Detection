@@ -1,6 +1,6 @@
 # Detecting anomalies in Bitcoin's "high" price 🕵️‍♂️
 
-This project focuses on identifying anomalies in Bitcoin transactions using a forecasting-based approach. A powerful LSTM model learns transactional patterns to predict the next highest price for transactions within the next hour. Any significant deviation (measured by Mean Absolute Error - MAE) from the predicted price is flagged as a potential anomaly.
+This project focuses on identifying anomalies in Bitcoin price using a forecasting-based approach. A powerful LSTM model learns patterns to predict the next highest price for transactions within the next hour. Any significant deviation (measured by Mean Absolute Error - MAE) from the predicted price is flagged as a potential anomaly.
 
 The `data_generator.py` module serves as the engine driving the real-time simulation. It dynamically generates a database table if one doesn't already exist, and populates it with historical Bitcoin transaction data from 2021.
 
