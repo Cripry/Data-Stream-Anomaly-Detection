@@ -83,6 +83,3 @@ This project is licensed under the [Apache License 2.0] -
 
 For any questions or feedback, feel free to reach out to cristianpreguza@gmail.com.
 
-## Acknowledgments 🙏
-
-This project was developed as a technical task for COBBLESTONE ENERGY company.
